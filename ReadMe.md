@@ -27,3 +27,7 @@ The rest Api where created with version base to allow new api routes to be added
 
     `[GET] /api/${version}/groups?color={value}`
     `[POST] /api/${version}/groups`
+
+## Assumptions made
+
+Will be making the assumption that you are runnnig frontend and backend locally so we are only  communicating the backend and the front end using 'localhost:3000' and the backend runs on 'localhost:8080'

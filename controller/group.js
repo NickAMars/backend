@@ -13,7 +13,9 @@ const getAllUser = async (req, res) => {
   const { error, value } = schema.validate(req.query);
   if (error) {
     // bad request 400
-    return res.status(400).send({ message: error.message });
+    return res
+      .status(400)
+      .send({ url: req.originalUrl, message: error.message });
   }
   try {
     // collects the value for the group
@@ -31,7 +33,7 @@ const getAllUser = async (req, res) => {
     }
   } catch (err) {
     // return a log of the error
-    return res.status(500).send({ message: err.message });
+    return res.status(500).send({ url: req.originalUrl, message: err.message });
   }
 };
 
@@ -46,7 +48,9 @@ const createGroup = async (req, res) => {
   // if value is not an object
   if (error) {
     // bad request 400
-    return res.status(400).send({ message: error.message });
+    return res
+      .status(400)
+      .send({ url: req.originalUrl, message: error.message });
   }
   try {
     // collects the value for the group
@@ -59,7 +63,7 @@ const createGroup = async (req, res) => {
     res.send(groups);
   } catch (err) {
     // return a log of the error
-    return res.status(500).send({ message: err.message });
+    return res.status(500).send({ url: req.originalUrl, message: err.message });
   }
 };
 
