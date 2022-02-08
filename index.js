@@ -1,7 +1,8 @@
 const express = require("express"),
   cors = require("cors"),
   xss = require("xss-clean"),
-  bodyParse = require("body-parser");
+  queryParser = require("express-query-int");
+bodyParse = require("body-parser");
 const group = require("./controller/group");
 require("./mongodb/connect");
 const app = express();
@@ -9,25 +10,35 @@ const app = express();
 // for bodies recieve from front end
 app.use(bodyParse.urlencoded({ extended: true }));
 app.use(bodyParse.json());
-const whiteList = ["http://localhost:3000"];
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (whiteList.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
-
-// cors policy for security
-app.use(cors(corsOptions));
-app.use(xss());
-
+app.use(queryParser());
 // port where server is running
 process.env.PORT = 8080;
 const version = process.env.npm_package_version;
 
+if (process.env.NODE_ENV.trim() !== "test") {
+  const whiteList = ["http://localhost:3000"];
+  const corsOptions = {
+    origin: function (origin, callback) {
+      if (whiteList.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  };
+  // cors policy for security
+  app.use(cors(corsOptions));
+}
+app.use(xss());
+app.use((req, res, next) => {
+  // disable cache
+  res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
+  res.header("Expires", "-1");
+  res.header("Pragma", "no-cache");
+  next();
+});
+
+//Routes
 app.get(`/api/${version}/groups`, group.getAllUser);
 app.post(`/api/${version}/groups`, group.createGroup);
 
@@ -46,10 +57,10 @@ app.use((err, req, res, next) => {
 });
 
 // Error handler B: Node's uncaughtException handler
-process.on("uncaughtException", function (err) {
-  console.log(`uncaughtException - ${err.message}`);
-});
+// process.on("uncaughtException", function (err) {
+//   console.log(`uncaughtException - ${err.message}`);
+// });
 
-app.listen(process.env.PORT, () => {
-  console.log(`server is running on port ${process.env.PORT}`);
-});
+app.listen(process.env.PORT);
+
+module.exports = app;
