@@ -30,11 +30,12 @@ The rest Api where created with version base to allow new api routes to be added
 
 ## Assumptions made
 
-Will be making the assumption that you are runnnig frontend and backend locally so we are only  communicating the backend and the front end using 'localhost:3000' and the backend runs on 'localhost:8080'
+Will be making the assumption that you are runnnig frontend and backend locally so we are only  communicating the backend and the front end using 'localhost:3000' and the backend runs on 'localhost:8080'__
+.gitignore was to contain configuration but keep it there evaluator to have a database
 
 ## Thing to do
 
-Post Test case should be tested with two things in mind the empty state and the state that has an item
--- use before and after function in test for create and remove the inserted item to have a stable test case and prevent applicaiton from consuming data
+Post Test case should be tested with two things in mind the empty state and the state that has an item.__
+-- use before and after function in test for create and remove the inserted item to have a stable test case and prevent applicaiton from consuming data__
 
-Would benifit from something to prevent multiple requestes from coming in at a giving time.
+Would benifit from something to prevent multiple requestes from coming in at a giving time to backend__
