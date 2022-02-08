@@ -29,20 +29,26 @@ const getUserByColor = (groups, color) => {
  * @param {*} values
  * @returns Object
  */
-const searchUserForExist = (groups, values) => {
+const searchUserForExist = (oldGroup, values) => {
   // if nama already exist find and update the color of that group
-  let users = new Map(Object.entries(values));
-  for (let [name, color] of users) {
+  let groups = new Map(oldGroup);
+  let tempGroup = {};
+  for (let { name, color } of values) {
+    tempGroup[name] = color;
+  }
+
+  for (let { name, color } of values) {
     for ([group, prop] of groups) {
       if (prop[name]) {
         prop[name] = color;
-        delete values[name];
+        // remove from the array
+        delete tempGroup[name];
       }
     }
   }
   // creating a group to show the users
-  if (Object.keys(values).length > 0) {
-    groups.set(`Group${groups.size + 1}`, values);
+  if (Object.keys(tempGroup).length > 0) {
+    groups.set(`Group${groups.size + 1}`, tempGroup);
   }
   return Object.fromEntries(groups);
 };
@@ -59,8 +65,17 @@ const getUserByGroups = (groups) => {
   return Object.fromEntries(newGroup);
 };
 
+const createMapNameColor = (nameColors) => {
+  let tempGroup = {};
+  for (let { name, color } of nameColors) {
+    tempGroup[name] = color;
+  }
+  return { Group1: tempGroup };
+};
+
 module.exports = {
   getUserByColor,
   searchUserForExist,
   getUserByGroups,
+  createMapNameColor,
 };

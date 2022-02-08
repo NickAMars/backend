@@ -8,17 +8,21 @@ const Group = require(`../mongodb/models/group`);
  */
 const getAllUser = async (req, res) => {
   const schema = joi.object({
-    color: joi.string().allow(null, "").optional(),
+    color: joi.string().allow(null, ""),
   });
   const { error, value } = schema.validate(req.query);
   if (error) {
     // bad request 400
-    return res.status(400).send({ message: error.message });
+    return res
+      .status(400)
+      .send({ url: req.originalUrl, message: error.message });
   }
   try {
     // collects the value for the group
     const data = await Group.findOne();
-    // console.log(data.groups)
+    // there is no data available
+    if (data === null || data === undefined)
+      return res.send({ color: {}, groups: {} });
     const result = helper.getUserByColor(data.groups, value.color);
     if (!value.color) {
       const groups = helper.getUserByGroups(data.groups);
@@ -31,7 +35,7 @@ const getAllUser = async (req, res) => {
     }
   } catch (err) {
     // return a log of the error
-    return res.status(500).send({ message: err.message });
+    return res.status(500).send({ url: req.originalUrl, message: err.message });
   }
 };
 
@@ -41,25 +45,38 @@ const getAllUser = async (req, res) => {
  * {    [Group]: { [Name]: [Color] , ...}   }
  */
 const createGroup = async (req, res) => {
-  const schema = joi.object();
+  const schema = joi.array().items(
+    joi.object({
+      name: joi.string().required(),
+      color: joi.string().required(),
+    })
+  );
   const { error, value } = schema.validate(req.body);
   // if value is not an object
   if (error) {
     // bad request 400
-    return res.status(400).send({ message: error.message });
+    return res
+      .status(400)
+      .send({ url: req.originalUrl, message: error.message });
   }
   try {
     // collects the value for the group
     const data = await Group.findOne();
     // if nama already exist find and update the color of that group
-    const groups = helper.searchUserForExist(data.groups, value);
+    if (data === null || data === undefined) {
+      const groups = new Group({ groups: helper.createMapNameColor(value) });
 
-    // update the existing group
-    await Group.findByIdAndUpdate({ _id: data._id }, { groups });
-    res.send(groups);
+      await groups.save();
+      // await Group.findByIdAndUpdate({ _id: data._id }, { groups: group });
+    } else {
+      const groups = helper.searchUserForExist(data.groups, value);
+      // update the existing group
+      await Group.findByIdAndUpdate({ _id: data._id }, { groups });
+    }
+    return res.status(204).send();
   } catch (err) {
     // return a log of the error
-    return res.status(500).send({ message: err.message });
+    return res.status(500).send({ url: req.originalUrl, message: err.message });
   }
 };
 
