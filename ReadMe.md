@@ -14,8 +14,8 @@
 ### run the application in test mode with
     `npm run test`
 
-### build package
-    `npm run build`
+### look at the application test converage
+    `npm run coverage`
 
 ## Introduction
 
@@ -31,3 +31,10 @@ The rest Api where created with version base to allow new api routes to be added
 ## Assumptions made
 
 Will be making the assumption that you are runnnig frontend and backend locally so we are only  communicating the backend and the front end using 'localhost:3000' and the backend runs on 'localhost:8080'
+
+## Thing to do
+
+Post Test case should be tested with two things in mind the empty state and the state that has an item
+-- use before and after function in test for create and remove the inserted item to have a stable test case and prevent applicaiton from consuming data
+
+Would benifit from something to prevent multiple requestes from coming in at a giving time.
