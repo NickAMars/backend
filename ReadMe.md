@@ -9,7 +9,7 @@
 ## Available Scripts
 
 ### run the application in development mode with
-    `npm run dev`
+    `npm  start`
 
 ### run the application in test mode with
     `npm run test`
