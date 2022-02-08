@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 // change url to another url in test
 let url = "";
-if (process.env.NODE_ENV.trim() === "test") {
+if (process.env.NODE_ENV.trim() !== "test") {
   url =
     "mongodb+srv://nick:password-1@groupcolor.tiw5h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 } else {
