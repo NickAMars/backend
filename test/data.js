@@ -3,6 +3,7 @@ const groups = new Map(
     Group1: {
       John: "Blue",
       Peter: "Green",
+      Nick: "Red",
     },
     Group2: {
       Jane: "Red",
@@ -29,8 +30,24 @@ const newGroup = [
   },
 ];
 
+const sameNameDifferentColor = [
+  {
+    color: "Blue",
+    name: "Nick",
+  },
+];
+
+const expectMap = {
+  Group1: {
+    Nick: "Blue",
+    David: "Orange",
+  },
+};
+
 module.exports = {
   groups,
   color,
   newGroup,
+  expectMap,
+  sameNameDifferentColor,
 };
